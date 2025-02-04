@@ -1,118 +1,124 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import 'react-native-gesture-handler'; // 항상 맨위
+import React, {useEffect, useState} from 'react';
+import {Image, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+// 스크린
+import LetterScreen from './src/screens/LetterScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import LetterDetailScreen from './src/screens/LetterDetailScreen';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+// 스텍 및 네이게이션 탭 생성
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+// 메인 탭
+const MainTabNavigator = () => {
+  /* 키보드 열림, 닫힘 이벤트 감지용
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => setIsKeyboardVisible(true),
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => setIsKeyboardVisible(false),
+    );
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  */
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={({route}) => ({
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          height: 97,
+          borderTopWidth: 0.5,
+          borderColor: '#2ECC71',
+          elevation: 50, // Android에서 그림자 깊이
+        },
+        tabBarIcon: ({focused}) => {
+          let iconSource;
+          if (route.name === 'Home') {
+            iconSource = focused
+              ? require('./src/assets/icons/homeIcon.png') // 활성화 상태 이미지
+              : require('./src/assets/icons/homeInactivate.png'); // 비활성화 상태 이미지
+          } else if (route.name === 'Letter') {
+            iconSource = focused
+              ? require('./src/assets/icons/letterIcon.png') // 활성화 상태 이미지
+              : require('./src/assets/icons/letterInactivate.png'); // 비활성화 상태 이미지
+          }
+          return (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                height: '100%',
+              }}>
+              {/* 선 */}
+              <View
+                style={{
+                  position: 'absolute',
+                  top: -30.5, // 탭바 상단에 맞추기 top: -(97 - 아이콘 높이)/2
+                  width: 50,
+                  height: 3,
+                  backgroundColor: focused ? '#2ECC71' : 'transparent',
+                }}
+              />
+              {/* 아이콘 */}
+              <Image
+                source={iconSource}
+                style={{
+                  width: 36,
+                  height: 36,
+                }}
+                resizeMode="contain"
+              />
+            </View>
+          );
+        },
+        tabBarLabel: () => null, // 아이콘 이름 숨기기
+        tabBarIconStyle: {
+          marginTop: 25, // 아이콘을 탭 바의 가운데 정렬
+        },
+        headerShown: false,
+      })}>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Letter" component={LetterScreen} />
+    </Tab.Navigator>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+// 전체 네비게이터
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/* MainTabNavigator를 첫 화면으로 설정 */}
+        <Stack.Screen
+          name="MainTabNavigator"
+          component={MainTabNavigator}
+          options={{headerShown: false}}
+        />
+        {/* LetterDetailScreen 추가 */}
+        <Stack.Screen
+          name="LetterDetailScreen"
+          component={LetterDetailScreen}
+          options={{headerShown: false}}
+        />
+        {/* 필요한 화면 추가 */}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
 export default App;

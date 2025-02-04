@@ -2,36 +2,45 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated'; // ✅ Animated는 꼭 reanimated에서 import 할 것
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import RNPickerSelect from 'react-native-picker-select'; // ⚠️ 드롭다운 오류 발생
+import YearMonthPicker from '../components/YearMonthPicker';
 
 import data from '../constants/luckyLetter.json';
 import Slider from '../components/Slider';
 
 const PhotoScreen = () => {
-  console.log('데이터 확인을 위한 출력:', data); // 🔍 데이터 확인용
+  const [letterData, setLetterData] = useState(null);
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // 0월부터 시작하므로 1 더해주고 두 자리로 패딩
-
-  const [letterData, setLetterData] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(currentYear); // 🔍
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth); // 🔍
-  const [filteredData, setFilteredData] = useState([]); // 🔍
-
-  // ✅ useEffect를 사용해 최초 1회만 데이터 설정 : 추후 API 연동을 위함
-  useEffect(() => {
-    setLetterData(data);
-  }, []);
-
-  // 🔍드롭다운에서 월이 선택될 때마다 데이터 필터링
-  const filterData = (year, month) => {
-    // API 연동 필요
-    const filtered = letterData.filter(item => item.date.includes(month)); // 날짜에 따라 필터링
-    setFilteredData(filtered);
+  const getCurrentYearMonth = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    return `${year}-${month}`;
   };
+
+  const handleDateChange = useCallback(filteredLetters => {
+    console.log('🔥 필터링 시작');
+    setLetterData(prev => {
+      return JSON.stringify(prev) === JSON.stringify(filteredLetters)
+        ? prev
+        : filteredLetters;
+    });
+    console.log('📌 필터링된 데이터:', filteredLetters);
+  }, []);
+  /*const handleDateChange = filteredLetters => {
+    console.log('필터링된 데이터:', filteredLetters);
+    setLetterData(filteredLetters);
+  }; -> handleDateChange가 무한 리렌더링 되는 에러 발생...*/
+
+  useEffect(() => {
+    // ✅ 초기 마운트 시 현재 년도와 월에 맞는 데이터로 변경
+    const currentYearMonth = getCurrentYearMonth();
+    const initialFilteredData = data.filter(item =>
+      item.letterDate.includes(currentYearMonth),
+    );
+    setLetterData(initialFilteredData);
+  }, []);
 
   // ✅ 스크롤 값 처음 한번만 렌더링 되도록 설정
   const scrollX = useRef(useSharedValue(0)).current;
@@ -43,21 +52,28 @@ const PhotoScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.dropDown}>2025년 1월 v</Text>
-        <Text style={styles.letterNumber}>행운편지 17개</Text>
+      <View style={styles.pickerContainer}>
+        <YearMonthPicker letterData={data} onDateChange={handleDateChange} />
       </View>
-      <Animated.FlatList
-        data={letterData}
-        renderItem={({item, index}) => (
-          <Slider item={item} index={index} scrollX={scrollX} />
-        )}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled
-        onScroll={onScrollHandler}
-        removeClippedSubviews={false}
-      />
+      {letterData === null ? ( // 데이터 로딩 중일 때 로딩 메시지 표시
+        <Text style={{textAlign: 'center', marginTop: 20}}>로딩 중...</Text>
+      ) : letterData.length === 0 ? (
+        <Text style={{textAlign: 'center', marginTop: 20}}>
+          받은 편지가 없습니다...
+        </Text>
+      ) : (
+        <Animated.FlatList
+          data={letterData}
+          renderItem={({item, index}) => (
+            <Slider item={item} index={index} scrollX={scrollX} />
+          )}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          onScroll={onScrollHandler}
+          removeClippedSubviews={false}
+        />
+      )}
     </View>
   );
 };
@@ -67,14 +83,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCF8',
   },
-  titleContainer: {
+  pickerContainer: {
     marginTop: 10,
     marginBottom: 20,
-  },
-  dropDown: {
-    fontSize: 35,
-    fontWeight: 3,
-    marginBottom: 10,
+    marginLeft: 10,
   },
 });
 

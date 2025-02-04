@@ -16,31 +16,34 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarLabelStyle: {fontSize: 12},
+        tabBarShowLabel: false,
         tabBarStyle: {backgroundColor: 'white'},
+        tabBarIndicatorStyle: {
+          backgroundColor: '#2ECC71',
+          height: 3, // 선 두께 조정
+          width: 65,
+          marginLeft: 37,
+        },
       }}>
       <Tab.Screen
         name="Photo"
         component={PhotoScreen}
         options={{
-          tabBarIcon: () => <PhotoIcon />, // 사진 아이콘
-          title: '사진',
+          tabBarIcon: ({focused}) => <PhotoIcon focused={focused} />, // 아이콘 크기 조정
         }}
       />
       <Tab.Screen
         name="List"
         component={ListScreen}
         options={{
-          tabBarIcon: () => <ListIcon />, // 목록 아이콘
-          title: '행운의 편지',
+          tabBarIcon: ({focused}) => <ListIcon focused={focused} />,
         }}
       />
       <Tab.Screen
         name="Calendar"
         component={CalenderScreen}
         options={{
-          tabBarIcon: () => <CalenderIcon />, // 달력 아이콘
-          title: '달력',
+          tabBarIcon: ({focused}) => <CalenderIcon focused={focused} />,
         }}
       />
     </Tab.Navigator>

@@ -9,12 +9,21 @@ import {LinearGradient} from 'react-native-svg';
 import PropTypes from 'prop-types';
 
 const {width} = Dimensions.get('screen');
+
 const formatDate = dateString => {
   const [year, month, day] = dateString.split('-');
   return `${year}년 ${parseInt(month, 10)}월 ${parseInt(day, 10)}일`;
 };
 
 const Slider = ({item, index, scrollX}) => {
+  console.log('슬라이더 컴포넌트에서 데이터 전달 확인용: ', item);
+  if (item === null) {
+    console.log('빈 배열이 전달되면 null이라 인식');
+  } else if (item === undefined) {
+    console.log('빈 배열이 전달되면 undefined이라 인식');
+  } else {
+    console.log('빈 배열이 전달되면 ???이라 인식');
+  }
   const rnAnimatedStyle = useAnimatedStyle(() => {
     const scale = interpolate(
       scrollX.value,

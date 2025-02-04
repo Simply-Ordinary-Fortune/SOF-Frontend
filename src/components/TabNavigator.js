@@ -1,13 +1,10 @@
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import PhotoScreen from '../screens/PhotoScreen'; // 사진 화면
-import ListScreen from '../screens/ListScreen'; // 리스트 화면
+import GalleryScreen from '../screens/GalleryScreen'; // 리스트 화면
 import CalenderScreen from '../screens/CalenderScreen'; // 달력 화면
-console.log('PhotoScreen:', PhotoScreen);
-console.log('ListScreen:', ListScreen);
-console.log('CalenderScreen:', CalenderScreen);
-import {PhotoIcon, ListIcon, CalenderIcon} from './NavigationIcon'; // 아이콘 임포트
-console.log('Icon:', PhotoIcon, ListIcon, CalenderIcon);
+import {PhotoIcon, GalleryIcon, CalenderIcon} from './NavigationIcon'; // 아이콘 임포트
+console.log('Icon:', PhotoIcon, GalleryIcon, CalenderIcon);
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -34,9 +31,9 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="List"
-        component={ListScreen}
+        component={GalleryScreen}
         options={{
-          tabBarIcon: ({focused}) => <ListIcon focused={focused} />,
+          tabBarIcon: ({focused}) => <GalleryIcon focused={focused} />,
         }}
       />
       <Tab.Screen

@@ -133,7 +133,9 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     textAlign: 'center',
-    color: 'blue',
+    color: '#2ECC71',
     marginTop: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });

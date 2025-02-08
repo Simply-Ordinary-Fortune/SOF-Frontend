@@ -8,16 +8,16 @@ const Toast = ({message, visible, onHide}) => {
     if (visible) {
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 200,
+        duration: 100,
         useNativeDriver: true,
       }).start(() => {
         setTimeout(() => {
           Animated.timing(fadeAnim, {
             toValue: 0,
-            duration: 200,
+            duration: 100,
             useNativeDriver: true,
           }).start(onHide);
-        }, 2000);
+        }, 1000);
       });
     }
   }, [visible]);
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     top: 10,
     left: 20,
     right: 20,
-    backgroundColor: '#D9DADB',
+    backgroundColor: '#B0B0B0',
     padding: 15,
     borderRadius: 10,
     zIndex: 1000,

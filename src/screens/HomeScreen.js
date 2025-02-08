@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Toast from '../components/Toast';
+import ModalBottomSheet from '../components/ModalBottomSheet';
 import {
   StyleSheet,
   View,
@@ -7,6 +8,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Card,
+  Modal,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {Icon} from 'react-native-elements';
@@ -15,6 +17,8 @@ const HomeScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [onModalClose, setOnModalClose] = useState(false);
 
   const onDayPress = day => {
     setSelectedDate(day.dateString);
@@ -32,6 +36,7 @@ const HomeScreen = () => {
         visible={isToastVisible}
         onHide={() => setIsToastVisible(false)}
       />
+      <ModalBottomSheet visible={isModalVisible} onClose={onModalClose} />
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => showToast('차트 페이지가 준비중입니다.')}>

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import Toast from '../components/Toast';
 import {
   StyleSheet,
   View,
@@ -12,16 +13,28 @@ import {Icon} from 'react-native-elements';
 
 const HomeScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [isToastVisible, setIsToastVisible] = useState(false);
 
   const onDayPress = day => {
     setSelectedDate(day.dateString);
   };
 
+  const showToast = message => {
+    setToastMessage(message);
+    setIsToastVisible(true);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      <Toast
+        message={toastMessage}
+        visible={isToastVisible}
+        onHide={() => setIsToastVisible(false)}
+      />
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => Alert.alert('차트 페이지로 이동합니다.')}>
+          onPress={() => showToast('차트 페이지가 준비중입니다.')}>
           <Icon
             name="bar-chart-outline"
             type="ionicon"
@@ -31,7 +44,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => Alert.alert('설정 페이지가 준비 중입니다.')}>
+          onPress={() => showToast('설정 페이지가 준비중입니다.')}>
           <Icon
             name="settings-outline"
             type="ionicon"
@@ -44,7 +57,7 @@ const HomeScreen = () => {
       <Calendar
         onDayPress={onDayPress}
         markedDates={{
-          [selectedDate]: {selected: true, selectedColor: '#00adf5'},
+          [selectedDate]: {selected: true, selectedColor: '#2ECC71'},
           '2023-01-06': {marked: true, dotColor: '#50cebb'},
           '2023-01-10': {marked: true, dotColor: '#f0ad4e'},
           '2023-01-15': {marked: true, dotColor: '#d9534f'},
@@ -62,7 +75,13 @@ const HomeScreen = () => {
         style={styles.calendar}
       />
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>오늘의 행운 기록하기</Text>
+        <Text
+          style={styles.buttonText}
+          onPress={() =>
+            showToast('오늘의 행운 기록하기 페이지가 준비중입니다.')
+          }>
+          오늘의 행운 기록하기
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

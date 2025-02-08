@@ -1,6 +1,14 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+  Card,
+} from 'react-native';
 import {Calendar} from 'react-native-calendars';
+import {Icon} from 'react-native-elements';
 
 const HomeScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -10,8 +18,29 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>로고자리!</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => Alert.alert('차트 페이지로 이동합니다.')}>
+          <Icon
+            name="bar-chart-outline"
+            type="ionicon"
+            size={28}
+            color="#959595"
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => Alert.alert('설정 페이지가 준비 중입니다.')}>
+          <Icon
+            name="settings-outline"
+            type="ionicon"
+            size={28}
+            color="#959595"
+          />
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.title}>🍀아보행 로고🍀</Text>
       <Calendar
         onDayPress={onDayPress}
         markedDates={{
@@ -35,7 +64,7 @@ const HomeScreen = () => {
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>오늘의 행운 기록하기</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -45,6 +74,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: 50,
     paddingHorizontal: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  settingsIcon: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 1,
   },
   title: {
     fontSize: 24,
@@ -62,7 +104,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   button: {
-    backgroundColor: '#00adf5',
+    backgroundColor: '#2ECC71',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',

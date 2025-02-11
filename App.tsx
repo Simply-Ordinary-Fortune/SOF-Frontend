@@ -9,6 +9,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LetterScreen from './src/screens/LetterScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import LetterDetailScreen from './src/screens/LetterDetailScreen';
+import RecordScreen from './src/screens/RecordScreen';
+import AlbumScreen from './src/screens/AlbumScreen';
+import MonthlyScreen from './src/screens/MonthlyScreen';
 
 // 스텍 및 네이게이션 탭 생성
 const Stack = createStackNavigator();
@@ -113,6 +116,24 @@ const App = () => {
         <Stack.Screen
           name="LetterDetailScreen"
           component={LetterDetailScreen}
+          options={{headerShown: false}}
+        />
+        {/* RecordScreen 추가 */}
+        <Stack.Screen
+          name="RecordScreen"
+          component={RecordScreen}
+          options={{headerShown: false}}
+        />
+        {/* AlbumScreen 추가 */}
+        <Stack.Screen
+          name="AlbumScreen"
+          component={AlbumScreen}
+          options={{headerShown: false}}
+        />
+        {/* MonthlyScreen 추가 */}
+        <Stack.Screen
+          name="MonthlyScreen"
+          component={MonthlyScreen}
           options={{headerShown: false}}
         />
         {/* 필요한 화면 추가 */}

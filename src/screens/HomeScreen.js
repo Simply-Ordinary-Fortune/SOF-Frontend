@@ -17,11 +17,16 @@ const HomeScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [onModalClose, setOnModalClose] = useState(false);
 
   const onDayPress = day => {
     setSelectedDate(day.dateString);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setOnModalClose(true);
   };
 
   const showToast = message => {
@@ -36,7 +41,7 @@ const HomeScreen = () => {
         visible={isToastVisible}
         onHide={() => setIsToastVisible(false)}
       />
-      <ModalBottomSheet visible={isModalVisible} onClose={onModalClose} />
+      <ModalBottomSheet visible={isModalVisible} onClose={onClose} />
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => showToast('차트 페이지가 준비중입니다.')}>

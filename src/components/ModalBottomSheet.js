@@ -13,12 +13,23 @@ import {Icon} from 'react-native-elements';
 
 const ModalBottomSheet = ({visible, onClose}) => {
   const [panY] = useState(new Animated.Value(0));
-
+  // 모달 복원
+  const resetPositionAnim = Animated.timing(panY, {
+    toValue: 0,
+    duration: 300,
+    useNativeDriver: true,
+  });
+  // 모달 닫기
+  const closeAnim = animated.timing(panY, {
+    toValue: 500,
+    duration: 300,
+    useNativeDriver: true,
+  });
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: (e, gesture) => {
       if (gesture.dy > 0) {
-        panY.setCalue(gesture.dy);
+        panY.setValue(gesture.dy);
       }
     },
     onPanResponderRelease: (e, gesture) => {
@@ -34,6 +45,10 @@ const ModalBottomSheet = ({visible, onClose}) => {
     inputRange: [-1, 0, 300],
     outputRange: [0, 0, 300],
   });
+
+  const handleClose = () => {
+    closeAnim.start(onClose);
+  };
 
   return (
     <Modal
@@ -60,7 +75,7 @@ const ModalBottomSheet = ({visible, onClose}) => {
               type="ionicon"
               size={28}
               color="#000"
-              onPress={onClose}
+              onPress={handleClose}
             />
           </View>
           <View style={styles.content}>

@@ -9,6 +9,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LetterScreen from './src/screens/LetterScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import LetterDetailScreen from './src/screens/LetterDetailScreen';
+import SettingScreen from './src/screens/SettingScreen';
 
 // 스텍 및 네이게이션 탭 생성
 const Stack = createStackNavigator();
@@ -113,6 +114,12 @@ const App = () => {
         <Stack.Screen
           name="LetterDetailScreen"
           component={LetterDetailScreen}
+          options={{headerShown: false}}
+        />
+        {/* SettingScreen 추가 */}
+        <Stack.Screen
+          name="SettingScreen"
+          component={SettingScreen}
           options={{headerShown: false}}
         />
         {/* 필요한 화면 추가 */}

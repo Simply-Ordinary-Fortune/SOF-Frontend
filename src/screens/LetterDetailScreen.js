@@ -12,7 +12,6 @@ const LetterDetailScreen = () => {
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Icon
-          style={styles.icon}
           onPress={() => navigation.goBack()}
           name="angle-left"
           size={40}

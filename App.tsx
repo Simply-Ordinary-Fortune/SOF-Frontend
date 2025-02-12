@@ -9,6 +9,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LetterScreen from './src/screens/LetterScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import LetterDetailScreen from './src/screens/LetterDetailScreen';
+import SettingScreen from './src/screens/SettingScreen';
 import RecordScreen from './src/screens/RecordScreen';
 import AlbumScreen from './src/screens/AlbumScreen';
 import MonthlyScreen from './src/screens/MonthlyScreen';
@@ -118,6 +119,10 @@ const App = () => {
           component={LetterDetailScreen}
           options={{headerShown: false}}
         />
+        {/* SettingScreen 추가 */}
+        <Stack.Screen
+          name="SettingScreen"
+          component={SettingScreen}
         {/* RecordScreen 추가 */}
         <Stack.Screen
           name="RecordScreen"

@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://sof.backendbase.site';
+export const BASE_URL = 'https://sof.backendbase.site';

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, FlatList, Dimensions, StyleSheet} from 'react-native';
 import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BASE_URL} from '../../env.js';
 import data from '../constants/luckyLetter.json';
 import CloverIcon from '../components/CloverIcon';
 
@@ -8,17 +10,61 @@ const screenWidth = Dimensions.get('window').width;
 const cellSize = screenWidth / 7 - 4; // 7개씩 맞추기 위해 여백 고려
 
 const CalendarScreen = () => {
-  // 날짜 데이터 변환
+  const [calendarLetter, setCalendarLetter] = useState([]);
+
+  const fetchBottleCalendar = async () => {
+    try {
+      const guestId = await AsyncStorage.getItem('guestId');
+      const response = await fetch(`${BASE_URL}/api/bottle/calendar`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'guest-id': '4866bb84-f080-4cee-bccc-004d1e984a5d', // 추후 guestId로 수정
+        },
+      });
+      console.log(`Response Status:`, response.status);
+
+      const responseBody = await response.text(); // 응답 본문 가져오기
+      if (response.ok) {
+        const responseData = JSON.parse(responseBody); // 성공 시 JSON 데이터 리턴
+        const calendarLetters = responseData?.result?.calendarList;
+        console.log('캘린더뷰 편지 목록:', calendarLetters);
+
+        // 📌 데이터 변환 (년-월을 키로 그룹화)
+        const groupedData = calendarLetters.reduce((acc, letter) => {
+          const date = moment(letter.date, 'YYYY-MM-DD');
+          console.log(date);
+          const key = `${date.year()}-${date.month() + 1}`; // YYYY-M 형식
+          if (!acc[key]) acc[key] = [];
+          acc[key].push(letter);
+          return acc;
+        }, {});
+
+        setCalendarLetter(groupedData);
+      } else {
+        const errorData = JSON.parse(responseBody); // 실패 응답 처리
+        console.log(errorData);
+      }
+    } catch (error) {
+      console.log(`Network Error: ${error.message}`);
+    }
+  };
+
+  useEffect(() => {
+    // ✅ 초기 마운트 시 데이터 로딩
+    fetchBottleCalendar();
+  }, []);
+
+  /* 날짜 데이터 변환
   const groupedLetters = data.reduce((acc, letter) => {
     const date = moment(letter.letterDate, 'YYYY-MM-DD');
     const key = `${date.year()}-${date.month() + 1}`; // YYYY-M 형식
     if (!acc[key]) acc[key] = [];
     acc[key].push(letter);
     return acc;
-  }, {});
+  }, {});*/
 
   // 📌 가장 오래된 날짜와 가장 최근 날짜 찾기
-  const allDates = Object.keys(groupedLetters).map(date =>
+  const allDates = Object.keys(calendarLetter).map(date =>
     moment(date, 'YYYY-M'),
   );
   const minDate = moment.min(allDates);
@@ -46,11 +92,12 @@ const CalendarScreen = () => {
     const [year, month] = item.split('-');
     const days = generateCalendar(year, month);
     const letterDates = new Map(
-      groupedLetters[item]?.map(l => [
-        moment(l.letterDate, 'YYYY-MM-DD').date(),
-        l.ImageUrl,
+      calendarLetter[item]?.map(l => [
+        moment(l.date, 'YYYY-MM-DD').date(),
+        l.imageUrl,
       ]) || [],
     );
+    console.log(`📅 ${item}의 데이터`, letterDates);
 
     return (
       <View style={styles.monthContainer}>

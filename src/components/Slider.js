@@ -51,7 +51,7 @@ const Slider = ({item, index, scrollX}) => {
     <Animated.View style={[styles.container, rnAnimatedStyle]}>
       <View style={styles.itemContainer}>
         <Image
-          source={{uri: item.ImageUrl}}
+          source={{uri: item.imageUrl}}
           style={{
             width: width * 0.75,
             height: width * 0.8,
@@ -63,10 +63,8 @@ const Slider = ({item, index, scrollX}) => {
           colors={['transparent', '#2ECC71']}
           style={styles.background}
         />
-        <Text style={styles.dateFormat}>
-          {formatDate(item.letterDate)}의 행운편지
-        </Text>
-        <Text style={styles.contentFormat}>{item.letterContent}</Text>
+        <Text style={styles.dateFormat}>{item.date}의 행운편지</Text>
+        <Text style={styles.contentFormat}>{item.message}</Text>
       </View>
     </Animated.View>
   );
@@ -118,10 +116,14 @@ const styles = StyleSheet.create({
   },
   dateFormat: {
     fontSize: 15,
+    fontFamily: 'NanumSquare Neo OTF',
+    color: '#19191B',
     marginTop: 15,
   },
   contentFormat: {
     fontSize: 18,
+    fontFamily: 'NanumSquare Neo OTF',
+    color: '#19191B',
     marginTop: 20,
   },
 });

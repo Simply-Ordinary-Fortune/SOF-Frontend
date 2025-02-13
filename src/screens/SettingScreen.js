@@ -1,6 +1,7 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BASE_URL} from '../../env.js';
 import {useNavigation} from '@react-navigation/native';
 import {
   StyleSheet,
@@ -8,7 +9,6 @@ import {
   Text,
   Image,
   Linking,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 
@@ -23,11 +23,13 @@ const openWebsite = () => {
 const SettingScreen = () => {
   const navigation = useNavigation();
   const [notification, setNotification] = useState();
+  const [useID, setUserID] = useState();
 
   // 알림 설정 불러오기
   const getNotificationSetting = async () => {
     try {
       const notify = await AsyncStorage.getItem('notify');
+      //console.log('💥알림설정 불러오기: ', notify);
       if (notify === null) {
         // 알림 값이 없다면 첫 접속이므로 기본값(true) 저장
         await AsyncStorage.setItem('notify', JSON.stringify(true));
@@ -41,20 +43,82 @@ const SettingScreen = () => {
   };
 
   // 알림 설정 저장하기
-  const saveNotificationSetting = async () => {
+  const saveNotificationSetting = () => {
     try {
-      setNotification(prev => {
-        const newValue = !prev; // 기존 값 반전
-        AsyncStorage.setItem('notify', JSON.stringify(newValue));
-        console.log('현재 알림 설정 상태: ', newValue);
-        return newValue;
-      });
+      console.log(!notification);
+      setNotification(!notification);
+      AsyncStorage.setItem('notify', JSON.stringify(!notification));
     } catch (error) {
       console.error('알림 값 저장 오류:', error);
     }
   };
 
-  getNotificationSetting;
+  // 알림 설정 디비에 저장하기
+  const fetchNotification = async () => {
+    try {
+      const guestId = await AsyncStorage.getItem('guestId');
+      const notify = await AsyncStorage.getItem('notify');
+      console.log(JSON.parse(notify));
+      console.log(`${BASE_URL}/api/notifications`);
+
+      const response = await fetch(`${BASE_URL}/api/notifications`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'guest-id': '4866bb84-f080-4cee-bccc-004d1e984a5d', // 추후 guestId로 수정
+        },
+        body: JSON.stringify({
+          pushEnabled: JSON.parse(notify),
+        }),
+      });
+      console.log(`Response Status:`, response.status);
+
+      const responseBody = await response.text(); // 응답 본문 가져오기
+      if (response.ok) {
+        console.log('💥알림 상태 저장완료!!');
+        const responseData = JSON.parse(responseBody); // 성공 시 JSON 데이터 리턴
+        //console.log('💥현재 유저 아이디: ', responseData?.result?.userId);
+
+        setUserID(responseData?.result?.userId);
+        setNotification(responseData?.result?.pushEnabled);
+      } else {
+        const errorData = JSON.parse(responseBody); // 실패 응답 처리
+        console.log(errorData);
+      }
+    } catch (error) {
+      console.log(`Network Error: ${error.message}`);
+    }
+  };
+
+  useEffect(() => {
+    const fetchMypage = async () => {
+      try {
+        const guestId = await AsyncStorage.getItem('guestId');
+        const response = await fetch(`${BASE_URL}/api/mypage`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'guest-id': '4866bb84-f080-4cee-bccc-004d1e984a5d', // 추후 guestId로 수정
+          },
+        });
+        console.log(`Response Status:`, response.status);
+
+        const responseBody = await response.text(); // 응답 본문 가져오기
+        if (response.ok) {
+          const responseData = JSON.parse(responseBody); // 성공 시 JSON 데이터 리턴
+          console.log('💥현재 알림 상태: ', responseData?.result?.pushEnabled);
+
+          setUserID(responseData?.result?.userId);
+          setNotification(responseData?.result?.pushEnabled);
+        } else {
+          const errorData = JSON.parse(responseBody); // 실패 응답 처리
+          console.log(errorData);
+        }
+      } catch (error) {
+        console.log(`Network Error: ${error.message}`);
+      }
+    };
+    fetchMypage();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -74,7 +138,11 @@ const SettingScreen = () => {
           source={require('../assets/icons/notiIcon.png')}
         />
         <Text style={styles.optionTitle}>일기 알림</Text>
-        <TouchableOpacity onPress={saveNotificationSetting}>
+        <TouchableOpacity
+          onPress={() => {
+            saveNotificationSetting();
+            fetchNotification();
+          }}>
           <Image
             source={
               notification
@@ -116,19 +184,24 @@ export default SettingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCF8',
+    backgroundColor: '#FFFFFF',
   },
   titleContainer: {
     flexDirection: 'row',
-    marginTop: 10,
-    marginLeft: 5,
-    marginRight: 5,
+    marginTop: 20,
     marginBottom: 10,
+    marginLeft: 20,
+    marginRight: 5,
   },
   title: {
+    textAlign: 'center',
     fontSize: 24,
     fontWeight: 'bold',
-    marginLeft: 160,
+    fontFamily: 'NanumSquare Neo OTF',
+    color: '#19191B',
+    marginTop: 5,
+    marginBottom: 20,
+    marginLeft: 140,
   },
   optionContainer: {
     flexDirection: 'row',
@@ -143,6 +216,8 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginTop: 3,
     fontSize: 20,
+    fontFamily: 'NanumSquare Neo OTF',
+    color: '#19191B',
     height: 40,
     textAlign: 'center',
   },

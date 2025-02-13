@@ -123,6 +123,8 @@ const App = () => {
         <Stack.Screen
           name="SettingScreen"
           component={SettingScreen}
+          options={{headerShown: false}}
+        />
         {/* RecordScreen 추가 */}
         <Stack.Screen
           name="RecordScreen"

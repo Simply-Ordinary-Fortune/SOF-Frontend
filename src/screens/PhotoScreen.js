@@ -58,8 +58,14 @@ const PhotoScreen = () => {
       {letterData === null ? ( // 데이터 로딩 중일 때 로딩 메시지 표시
         <Text style={{textAlign: 'center', marginTop: 20}}>로딩 중...</Text>
       ) : letterData.length === 0 ? (
-        <Text style={{textAlign: 'center', marginTop: 20}}>
-          받은 편지가 없습니다...
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 20,
+            fontWeight: 'bold',
+            marginTop: 200,
+          }}>
+          이 달에는 받은 편지가 없습니다...
         </Text>
       ) : (
         <Animated.FlatList

@@ -55,6 +55,11 @@ const LetterScreen = () => {
   return (
     <View>
       <Text style={styles.title}>행운의 유리병 편지</Text>
+      <Text
+        style={styles.title}
+        onPress={() => navigation.navigate('SettingScreen')}>
+        설정
+      </Text>
       <View style={styles.imageContainer}>
         {/* 유리병 이미지 */}
         <Image

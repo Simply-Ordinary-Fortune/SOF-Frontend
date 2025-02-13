@@ -10,6 +10,7 @@ import ImagePicker from 'react-native-image-picker';
 import LetterScreen from './src/screens/LetterScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import LetterDetailScreen from './src/screens/LetterDetailScreen';
+import SettingScreen from './src/screens/SettingScreen';
 import RecordScreen from './src/screens/RecordScreen';
 import AlbumScreen from './src/screens/AlbumScreen';
 import MonthlyScreen from './src/screens/MonthlyScreen';
@@ -110,47 +111,54 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         {/* MainTabNavigator를 첫 화면으로 설정 */}
-        {/* <Stack.Screen
+        <Stack.Screen
           name="MainTabNavigator"
           component={MainTabNavigator}
           options={{headerShown: false}}
-        /> */}
+        />
         {/* LetterDetailScreen 추가 */}
-        {/* <Stack.Screen
+        <Stack.Screen
           name="LetterDetailScreen"
           component={LetterDetailScreen}
           options={{headerShown: false}}
-        /> */}
+        />
+        {/* SettingScreen 추가 */}
+        <Stack.Screen
+          name="SettingScreen"
+          component={SettingScreen}
+          options={{headerShown: false}}
+        />
         {/* RecordScreen 추가 */}
-        {/* <Stack.Screen
+         <Stack.Screen
           name="RecordScreen"
           component={RecordScreen}
           options={{headerShown: false}}
-        /> */}
+        /> 
         {/* AlbumScreen 추가 */}
-        {/* <Stack.Screen
+        <Stack.Screen
           name="AlbumScreen"
           component={AlbumScreen}
           options={{headerShown: false}}
-        /> */}
+        />
         {/* MonthlyScreen 추가 */}
-        {/* <Stack.Screen
+        <Stack.Screen
           name="MonthlyScreen"
           component={MonthlyScreen}
           options={{headerShown: false}}
-        /> */}
-        {/* 필요한 화면 추가 */}
+        />
         {/* TodayPhotoScreen 추가 */}
         <Stack.Screen
           name="TodayPhotoScreen"
           component={TodayPhotoScreen}
           options={{headerShown: false}}
-        />
+          />
+        {/* addRecordScreen 추가 */}
         <Stack.Screen
           name="addRecordScreen"
           component={addRecordScreen}
           options={{headerShown: false}}
-        />
+          />
+          {/* 필요한 화면 추가 */}
       </Stack.Navigator>
     </NavigationContainer>
   );

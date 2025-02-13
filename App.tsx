@@ -4,6 +4,7 @@ import {Image, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import ImagePicker from 'react-native-image-picker';
 
 // 스크린
 import LetterScreen from './src/screens/LetterScreen';
@@ -12,6 +13,8 @@ import LetterDetailScreen from './src/screens/LetterDetailScreen';
 import RecordScreen from './src/screens/RecordScreen';
 import AlbumScreen from './src/screens/AlbumScreen';
 import MonthlyScreen from './src/screens/MonthlyScreen';
+import TodayPhotoScreen from './src/screens/TodayPhotoScreen';
+import addRecordScreen from './src/screens/AddRecordScreen';
 
 // 스텍 및 네이게이션 탭 생성
 const Stack = createStackNavigator();
@@ -107,36 +110,47 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         {/* MainTabNavigator를 첫 화면으로 설정 */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="MainTabNavigator"
           component={MainTabNavigator}
           options={{headerShown: false}}
-        />
+        /> */}
         {/* LetterDetailScreen 추가 */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="LetterDetailScreen"
           component={LetterDetailScreen}
           options={{headerShown: false}}
-        />
+        /> */}
         {/* RecordScreen 추가 */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="RecordScreen"
           component={RecordScreen}
           options={{headerShown: false}}
-        />
+        /> */}
         {/* AlbumScreen 추가 */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="AlbumScreen"
           component={AlbumScreen}
           options={{headerShown: false}}
-        />
+        /> */}
         {/* MonthlyScreen 추가 */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="MonthlyScreen"
           component={MonthlyScreen}
           options={{headerShown: false}}
-        />
+        /> */}
         {/* 필요한 화면 추가 */}
+        {/* TodayPhotoScreen 추가 */}
+        <Stack.Screen
+          name="TodayPhotoScreen"
+          component={TodayPhotoScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="addRecordScreen"
+          component={addRecordScreen}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

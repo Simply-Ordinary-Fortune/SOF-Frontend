@@ -15,7 +15,7 @@ export const fetchBottleFocus = async ({mode, year, month, letterId}) => {
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
-        'guest-id': '4866bb84-f080-4cee-bccc-004d1e984a5d', // 추후 guestId로 수정
+        'guest-id': guestId, // 테스트 할 때 '4866bb84-f080-4cee-bccc-004d1e984a5d' 사용
       },
     });
     console.log(`Response Status:`, response.status);
@@ -35,10 +35,10 @@ export const fetchBottleFocus = async ({mode, year, month, letterId}) => {
     } else {
       const errorData = JSON.parse(responseBody);
       console.log(errorData);
-      return {focusLetters: [], focusLetterCount: 0}; // 실패 시 빈 배열 반환
+      return {focusLetters: [], focusLetterCount: 0};
     }
   } catch (error) {
     console.log(`❌ Network Error: ${error.message}`);
-    return {focusLetters: [], focusLetterCount: 0}; // 네트워크 오류 시 빈 값 반환
+    return {focusLetters: [], focusLetterCount: 0};
   }
 };

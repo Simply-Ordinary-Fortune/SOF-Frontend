@@ -11,7 +11,7 @@ import {fetchBottleFocus} from '../utils/fetchBottleFocus.js';
 const LetterScreen = () => {
   console.log('행운편지보관함 화면 랜더링입니다...');
 
-  const [recentLetter, setRecentLetter] = useState();
+  const [recentLetter, setRecentLetter] = useState([]);
   const [isAllChecked, setIsAllChecked] = useState();
   const [letterId, setLetterId] = useState();
 
@@ -29,7 +29,7 @@ const LetterScreen = () => {
         const response = await fetch(`${BASE_URL}/api/bottle`, {
           headers: {
             'Content-Type': 'application/json',
-            'guest-id': '4866bb84-f080-4cee-bccc-004d1e984a5d', // 추후 guestId로 수정
+            'guest-id': guestId, // 테스트 할 때는 '4866bb84-f080-4cee-bccc-004d1e984a5d'
           },
         });
         console.log(`Response Status:`, response.status);
@@ -62,7 +62,7 @@ const LetterScreen = () => {
     currentDate.getMonth() + 1
   }.${currentDate.getDate()}`;
 
-  // 최근 행운편지 2개
+  /*// 최근 행운편지 2개
   const luckyLetters = [
     {
       letterId: 1,
@@ -94,10 +94,10 @@ const LetterScreen = () => {
       tagName: '자연의 선물',
       tagImageUrl: 'df',
     },
-  ];
+  ];*/
 
   return (
-    <View>
+    <SafeAreaView>
       <View style={{backgroundColor: '#FFFFFF'}}>
         <Text style={styles.title}>행운의 유리병 편지</Text>
       </View>
@@ -141,33 +141,29 @@ const LetterScreen = () => {
         </View>
         {/* 가장 최근의 행운 편지 1개 표시 */}
         <View>
-          {luckyLetters.slice(0, 1).map(
-            (
-              letter, //recentLetter로 추후 교체(속성도)
-            ) => (
-              <TouchableOpacity
-                onPress={() => {
-                  setIsAllChecked(false);
-                  navigation.navigate('LetterDetailScreen', {letterId: 80}); //letterId 넘어오는 데이터로 수정필요
-                }}
-                key={letter.letterId}
-                style={styles.letterItem}>
-                <SafeAreaView>
-                  <CloverImage
-                    style={styles.cloverShapeImage}
-                    imageUrl={letter.ImageUrl}
-                    size={65}
-                  />
-                </SafeAreaView>
-                <Text style={styles.letterDate}>
-                  {letter.letterDate} 행운편지
-                </Text>
-              </TouchableOpacity>
-            ),
-          )}
+          {recentLetter.slice(0, 1).map(letter => (
+            <TouchableOpacity
+              onPress={() => {
+                setIsAllChecked(false);
+                navigation.navigate('LetterDetailScreen', {letterId: 80}); //letterId 넘어오는 데이터로 수정필요
+              }}
+              key={letter.letterId}
+              style={styles.letterItem}>
+              <SafeAreaView>
+                <CloverImage
+                  style={styles.cloverShapeImage}
+                  imageUrl={letter.imageUrl}
+                  size={65}
+                />
+              </SafeAreaView>
+              <Text style={styles.letterDate}>
+                {letter.year}년 {letter.sentAt} 행운편지
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

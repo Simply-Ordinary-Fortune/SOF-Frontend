@@ -71,7 +71,7 @@ const AddRecordBtn = ({recordText, selectedTag, photo, isToday}) => {
 
     const formData = new FormData();
     formData.append('content', recordText);
-    formData.append('tags', JSON.stringify([selectedTag]));
+    formData.append('tags[]', selectedTag);
     if (photo) {
       formData.append('image', {
         uri: photo,
@@ -80,21 +80,24 @@ const AddRecordBtn = ({recordText, selectedTag, photo, isToday}) => {
       });
     }
 
-    console.log('Request URL:', 'http://<your-ip>:3000/api/records');
     console.log('FormData:', formData);
     try {
-      const response = await axios.post(
-        'http://54.180.5.215:3000/api/records',
-        formData,
-        {
-          headers: {
-            'guest-id': '65e44a6d-5f27-4a63-a819-494234d46a1d',
-            'Content-Type': 'multipart/form-data',
-          },
-        },
-      );
+      axios
+        .post('http://54.180.5.215:3000/api/signup')
+        .then(response => console.log('서버 정상:', response.data))
+        .catch(error => console.error('서버 연결 실패:', error));
 
-      console.log('응답:', response.data);
+      // const response = await axios.post(
+      //   'http://54.180.5.215:3000/api/records',
+      //   formData,
+      //   {
+      //     headers: {
+      //       'guest-id': '65e44a6d-5f27-4a63-a819-494234d46a1d',
+      //     },
+      //   },
+      // );
+
+      // console.log('응답:', response.data);
       Alert.alert('성공', '기록이 저장되었습니다!');
       navigation.goBack();
     } catch (error) {

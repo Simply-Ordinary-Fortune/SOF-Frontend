@@ -8,7 +8,7 @@ console.log('Icon:', PhotoIcon, GalleryIcon, CalenderIcon);
 
 const Tab = createMaterialTopTabNavigator();
 
-const TabNavigator = () => {
+const TabNavigator = ({screenProps}) => {
   console.log('탭네비게이터 랜더링합니다...');
   return (
     <Tab.Navigator
@@ -28,6 +28,7 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused}) => <PhotoIcon focused={focused} />, // 아이콘 크기 조정
         }}
+        initialParams={{letterId: screenProps?.letterId}}
       />
       <Tab.Screen
         name="List"

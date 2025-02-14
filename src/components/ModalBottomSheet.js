@@ -20,7 +20,7 @@ const ModalBottomSheet = ({visible, onClose}) => {
     useNativeDriver: true,
   });
   // 모달 닫기
-  const closeAnim = animated.timing(panY, {
+  const closeAnim = Animated.timing(panY, {
     toValue: 500,
     duration: 300,
     useNativeDriver: true,

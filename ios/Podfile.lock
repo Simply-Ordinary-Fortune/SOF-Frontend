@@ -1283,6 +1283,27 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-compressor (1.10.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-image-picker (8.0.0):
     - DoubleConversion
     - glog
@@ -1304,6 +1325,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-image-resizer (1.4.5):
+    - React-Core
   - react-native-pager-view (6.7.0):
     - DoubleConversion
     - glog
@@ -1727,6 +1750,15 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNImageCropPicker (0.42.0):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.42.0)
+    - TOCropViewController (~> 2.7.4)
+  - RNImageCropPicker/QBImagePickerController (0.42.0):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController (~> 2.7.4)
   - RNReanimated (3.16.7):
     - DoubleConversion
     - glog
@@ -1930,6 +1962,7 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.7.1)
+  - TOCropViewController (2.7.4)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1972,7 +2005,9 @@ DEPENDENCIES:
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
+  - react-native-compressor (from `../node_modules/react-native-compressor`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -2007,6 +2042,7 @@ DEPENDENCIES:
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -2019,6 +2055,7 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
+    - TOCropViewController
 
 EXTERNAL SOURCES:
   boost:
@@ -2096,8 +2133,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-camera"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-camera-roll/camera-roll"
+  react-native-compressor:
+    :path: "../node_modules/react-native-compressor"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-image-resizer:
+    :path: "../node_modules/react-native-image-resizer"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
@@ -2166,6 +2207,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fast-image"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -2216,7 +2259,9 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: 36341e09dcd1df535503e6ed2ddf88f10da56d52
   react-native-camera: 079d80421f0572d6b4e836908114d614d0adb553
   react-native-cameraroll: 31e39d303319ba20657808f33104afa9d52d83aa
+  react-native-compressor: 3cb81b878bb4df31cac23477b0835214c10a46bb
   react-native-image-picker: 2267ec77d9060980b4ad3917c793ccc9f36bda59
+  react-native-image-resizer: 17b2d73c030975b6543395c7e7368bc8774c5efa
   react-native-pager-view: 4ad4883a8288c5207bd432dd3c98bf648b7bc7d7
   react-native-safe-area-context: 0d8827b2420dfb4c8a8e27639585e61b912261be
   React-nativeconfig: 539ff4de6ce3b694e8e751080568c281c84903ce
@@ -2251,6 +2296,7 @@ SPEC CHECKSUMS:
   RNCPicker: c657bd58a82b164a957812f82a0b4bab4245de2e
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNGestureHandler: 7afc0db05cd604c8530dba90d9b453d4d581deab
+  RNImageCropPicker: b0afedeefd8655254a15c34103718455fde6ce59
   RNReanimated: a2692304a6568bc656c04c8ffea812887d37436e
   RNScreens: 4c7d5710e955dcf72c14a546e29744f9e591370b
   RNSVG: c50d29abf38abbf48ebfc50b6258f81099aeabae
@@ -2258,6 +2304,7 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   Yoga: be6f55a028e86c83ae066f018e9b5d24ffc45436
 
 PODFILE CHECKSUM: c0809da392f872da37dae65d7717eccfe267c177

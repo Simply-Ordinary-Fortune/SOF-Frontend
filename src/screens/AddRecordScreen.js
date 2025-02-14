@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   SafeAreaView,
@@ -15,8 +15,30 @@ import {
 import {useRoute, useNavigation} from '@react-navigation/native';
 import Tag from '../components/Tag';
 import SealedRecord from '../components/SealRecord';
+import AddRecordBtn from '../components/AddRecordBtn';
+import * as ImageResizer from 'react-native-image-resizer';
 
 const {height} = Dimensions.get('window'); // 화면 높이 가져오기
+
+// 이미지 리사이징 함수
+const resizeImage = async uri => {
+  try {
+    var ImageResizer = require('react-native-image-resizer').default;
+
+    const resizedImage = await ImageResizer.createResizedImage(
+      uri, // 원본 이미지 경로
+      800, // 너비 (너무 크게 업로드되지 않도록 조절)
+      800, // 높이
+      'JPEG', // 포맷
+      80, // 품질 (0~100)
+    );
+    console.log('리사이징됨');
+    return resizedImage.uri; // 리사이즈된 이미지의 URI 반환
+  } catch (error) {
+    console.error('📌 이미지 리사이징 오류:', error);
+    return null;
+  }
+};
 
 const AddRecordScreen = () => {
   const route = useRoute();
@@ -27,10 +49,13 @@ const AddRecordScreen = () => {
   const [isSwiped, setIsSwiped] = useState(false);
   const [swipeTextOpacity] = useState(new Animated.Value(1)); // 처음에는 완전히 보이게 설정
   const [showSealedRecord, setShowSealedRecord] = useState(false); // 추가된 상태
+  const [resizedPhotoUri, setResizedPhotoUri] = useState(null); // Resize된 이미지 URI 저장
+  const uri = isToday ? photo : photo.uri;
 
   const translateY = useRef(new Animated.Value(0)).current; // 화면 이동 애니메이션
   const sealAnim = useRef(new Animated.Value(0)).current; // 실링 왁스 찍는 애니메이션
   const afterSealAnim = useRef(new Animated.Value(0)).current;
+
   const handleTagSelect = color => {
     setSelectedTag(prev => (prev === color ? null : color));
   };
@@ -91,6 +116,21 @@ const AddRecordScreen = () => {
       },
     }),
   ).current;
+
+  // Resize the image when photo is available
+  useEffect(() => {
+    const resizeImageIfNeeded = async () => {
+      if (uri) {
+        const resizedImageUri = await resizeImage(uri);
+        if (resizedImageUri) {
+          setResizedPhotoUri(resizedImageUri); // 리사이즈된 이미지 URI 저장
+        } else {
+          console.error('❌ 이미지 리사이징 실패');
+        }
+      }
+    };
+    resizeImageIfNeeded();
+  }, [uri]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -196,16 +236,17 @@ const AddRecordScreen = () => {
       {showSealedRecord && (
         <>
           <SealedRecord
-            photo={isToday ? photo : photo.uri}
+            photo={resizedPhotoUri || (isToday ? photo : photo.uri)} // 리사이즈된 이미지가 있으면 사용
             today={today}
             selectedTag={selectedTag}
             recordText={recordText}
           />
-          <TouchableOpacity
-            style={styles.closeBtn}
-            onPress={() => navigation.navigate('MainTabNavigator')}>
-            <Text style={styles.closeBtnText}>닫기</Text>
-          </TouchableOpacity>
+          <AddRecordBtn
+            recordText={recordText}
+            selectedTag={selectedTag}
+            photo={resizedPhotoUri}
+            isToday={isToday}
+          />
         </>
       )}
     </SafeAreaView>
@@ -310,7 +351,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#F5FCF8',
   },
   sealImage: {
     width: 172,
@@ -322,19 +362,6 @@ const styles = StyleSheet.create({
   swipeText: {
     color: '#2ECC71',
     fontSize: 17,
-    fontWeight: 'bold',
-  },
-  closeBtn: {
-    bottom: 46,
-    marginHorizontal: 20,
-    backgroundColor: '#2ECC71',
-    borderRadius: 10,
-    paddingVertical: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  closeBtnText: {
-    fontSize: 18,
     fontWeight: 'bold',
   },
 });

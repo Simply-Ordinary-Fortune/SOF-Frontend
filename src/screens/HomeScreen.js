@@ -113,12 +113,10 @@ const HomeScreen = () => {
         <Text style={styles.descriptionText}>
           오늘 발견한 아주 보통의 행운이 있나요?
         </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text
-            style={styles.buttonText}
-            onPress={() => navigation.navigate('TodayPhotoScreen')}>
-            오늘의 행운 기록하기
-          </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('TodayPhotoScreen')}>
+          <Text style={styles.buttonText}>오늘의 행운 기록하기</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

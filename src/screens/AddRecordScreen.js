@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import Tag from '../components/Tag';
-import SealedRecord from '../components/\bSealRecord';
+import SealedRecord from '../components/SealRecord';
 
 const {height} = Dimensions.get('window'); // 화면 높이 가져오기
 
@@ -111,15 +111,16 @@ const AddRecordScreen = () => {
             </TouchableOpacity>
             <Text style={styles.headerText}>{today}</Text>
           </View>
-
-          {photo ? (
-            <Image
-              source={{uri: isToday ? photo : photo.uri}}
-              style={styles.image}
-            />
-          ) : (
-            <Text style={styles.noPhotoText}>사진이 없습니다.</Text>
-          )}
+          <View style={styles.imageContainer}>
+            {photo ? (
+              <Image
+                source={{uri: isToday ? photo : photo.uri}}
+                style={styles.image}
+              />
+            ) : (
+              <Text style={styles.noPhotoText}>사진이 없습니다.</Text>
+            )}
+          </View>
 
           <View style={styles.recordBox}>
             <Text style={styles.recordTitle}>오늘의 행운 기록</Text>
@@ -132,6 +133,7 @@ const AddRecordScreen = () => {
               numberOfLines={4}
               editable={!showSealedRecord}
               maxLength={100}
+              placeholderTextColor="B0B0B0"
             />
 
             <Text style={styles.recordTitle}>태그</Text>
@@ -199,9 +201,11 @@ const AddRecordScreen = () => {
             selectedTag={selectedTag}
             recordText={recordText}
           />
-          <View style={styles.closeBtn}>
+          <TouchableOpacity
+            style={styles.closeBtn}
+            onPress={() => navigation.navigate('MainTabNavigator')}>
             <Text style={styles.closeBtnText}>닫기</Text>
-          </View>
+          </TouchableOpacity>
         </>
       )}
     </SafeAreaView>
@@ -235,9 +239,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   image: {
-    width: '100%',
-    aspectRatio: 1,
+    width: 354,
+    height: 310,
     borderRadius: 10,
+  },
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   noPhotoText: {
     fontSize: 14,
@@ -285,7 +293,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginTop: 23,
-    paddingVertical: 3, // 터치 영역 확대
+    paddingVertical: 2, // 터치 영역 확대
   },
   tagContainer: {
     flexDirection: 'row',
@@ -309,7 +317,7 @@ const styles = StyleSheet.create({
     height: 172,
   },
   swipeTextBox: {
-    marginTop: 10,
+    marginTop: 39,
   },
   swipeText: {
     color: '#2ECC71',

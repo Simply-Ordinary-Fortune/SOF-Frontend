@@ -20,7 +20,7 @@ const SealedRecord = ({photo, today, selectedTag, recordText}) => {
         <Text style={styles.noPhotoText}>사진이 없습니다.</Text>
       )}
       <Text style={styles.dateText}>{today}의 행운</Text>
-      {selectedTag && <Tag color={selectedTag} />}
+      {selectedTag && <Tag color={selectedTag} noClick={true} />}
       <View style={styles.recordTextBox}>
         <Text style={styles.recordTitle}>한 줄 기록</Text>
         <Text style={styles.recordText}>{recordText}</Text>
@@ -61,6 +61,8 @@ const styles = StyleSheet.create({
   },
   recordTextBox: {
     marginVertical: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   recordTitle: {
     fontSize: 14,

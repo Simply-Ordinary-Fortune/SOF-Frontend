@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import ImagePicker from 'react-native-image-picker';
+import {enableScreens} from 'react-native-screens';
 
 // 스크린
 import LetterScreen from './src/screens/LetterScreen';
@@ -15,7 +16,10 @@ import RecordScreen from './src/screens/RecordScreen';
 import AlbumScreen from './src/screens/AlbumScreen';
 import MonthlyScreen from './src/screens/MonthlyScreen';
 import TodayPhotoScreen from './src/screens/TodayPhotoScreen';
-import addRecordScreen from './src/screens/AddRecordScreen';
+import AddRecordScreen from './src/screens/AddRecordScreen';
+
+// 네비게이션 최적화 및 오류 방지 설정
+enableScreens();
 
 // 스텍 및 네이게이션 탭 생성
 const Stack = createStackNavigator();
@@ -129,11 +133,11 @@ const App = () => {
           options={{headerShown: false}}
         />
         {/* RecordScreen 추가 */}
-         <Stack.Screen
+        <Stack.Screen
           name="RecordScreen"
           component={RecordScreen}
           options={{headerShown: false}}
-        /> 
+        />
         {/* AlbumScreen 추가 */}
         <Stack.Screen
           name="AlbumScreen"
@@ -151,14 +155,14 @@ const App = () => {
           name="TodayPhotoScreen"
           component={TodayPhotoScreen}
           options={{headerShown: false}}
-          />
+        />
         {/* addRecordScreen 추가 */}
         <Stack.Screen
-          name="addRecordScreen"
-          component={addRecordScreen}
+          name="AddRecordScreen"
+          component={AddRecordScreen}
           options={{headerShown: false}}
-          />
-          {/* 필요한 화면 추가 */}
+        />
+        {/* 필요한 화면 추가 */}
       </Stack.Navigator>
     </NavigationContainer>
   );

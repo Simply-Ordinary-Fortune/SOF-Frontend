@@ -16,16 +16,36 @@ import FastImage from 'react-native-fast-image';
 import {RNCamera} from 'react-native-camera';
 import {useStores} from 'app/stores';
 import {Button} from 'react-native-elements';
-import {launchCamera} from 'react-native-image-picker';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 
 const Camera = () => {
   // useRef로 camera를 위한 ref
   const cameraRef = useRef(null);
   const [isTakingPhoto, setIsTakingPhoto] = useState(false);
 
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: '카메라 권한 요청',
+            message: '사진을 찍기 위해 카메라 접근 권한이 필요합니다.',
+            buttonNeutral: '나중에',
+            buttonNegative: '취소',
+            buttonPositive: '허용',
+          },
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    }
+    return true;
+  };
+
   const takePhoto = async cameraRef => {
-    //퀄리티는 0.1~ 1.0 사이로 지정해줍니다.
     const options = {quality: 0.3, base64: false};
     try {
       const data = await cameraRef.current.takePictureAsync(options);
@@ -121,7 +141,7 @@ const TodayPhotoScreen = () => {
           console.log('ImagePicker Error: ', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
           console.log('Selected Photo: ', response.assets[0]);
-          navigation.navigate('addRecordScreen', {
+          navigation.navigate('AddRecordScreen', {
             photo: response.assets[0],
             isToday: false,
             today: today,
@@ -270,7 +290,7 @@ const TodayPhotoScreen = () => {
                     <TouchableOpacity
                       key={index}
                       onPress={() =>
-                        navigation.navigate('addRecordScreen', {
+                        navigation.navigate('AddRecordScreen', {
                           photo: photo.node.image.uri,
                           isToday: true,
                           today: today,

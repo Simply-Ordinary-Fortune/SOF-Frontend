@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {Icon} from 'react-native-elements';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -19,6 +20,7 @@ const HomeScreen = () => {
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [onModalClose, setOnModalClose] = useState(false);
+  const navigation = useNavigation();
 
   const onDayPress = day => {
     setSelectedDate(day.dateString);
@@ -41,7 +43,7 @@ const HomeScreen = () => {
         visible={isToastVisible}
         onHide={() => setIsToastVisible(false)}
       />
-      <ModalBottomSheet visible={isModalVisible} onClose={onClose} />
+      <ModalBottomSheet visible={isModalVisible} onClose={closeModal} />
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => showToast('차트 페이지가 준비중입니다.')}>
@@ -114,9 +116,7 @@ const HomeScreen = () => {
         <TouchableOpacity style={styles.button}>
           <Text
             style={styles.buttonText}
-            onPress={() =>
-              showToast('오늘의 행운 기록하기 페이지가 준비중입니다.')
-            }>
+            onPress={() => navigation.navigate('TodayPhotoScreen')}>
             오늘의 행운 기록하기
           </Text>
         </TouchableOpacity>

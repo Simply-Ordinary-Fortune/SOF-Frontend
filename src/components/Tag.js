@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 
-const Tag = ({color, isSelected, onSelect}) => {
+const Tag = ({color, isSelected, onSelect, noClick}) => {
   let label;
   let textColor;
   let backgroundColor;
@@ -47,7 +47,13 @@ const Tag = ({color, isSelected, onSelect}) => {
   }
 
   return (
-    <TouchableOpacity onPress={() => onSelect(color)}>
+    <TouchableOpacity
+      onPress={() => {
+        if (noClick) {
+          return;
+        }
+        onSelect(color);
+      }}>
       <View
         style={[
           styles.tagContainer,

@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "http://sof.backendbase.site//api/records/photos",
+      "request": "launch",
+      "url": "http://sof.backendbase.site//api/records/photos"
+    }
+  ]
+}

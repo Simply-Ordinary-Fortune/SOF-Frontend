@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import Tag from '../components/Tag';
-import SealedRecord from '../components/\bSealRecord';
+import SealedRecord from '../components/SealRecord';
 
 const {height} = Dimensions.get('window'); // 화면 높이 가져오기
 

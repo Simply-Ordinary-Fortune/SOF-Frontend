@@ -21,6 +21,16 @@ const HomeScreen = ({navigation}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [onModalClose, setOnModalClose] = useState(false);
 
+  useEffect(() => {
+    const checkGuestId = async () => {
+      const guestId = await AsyncStorage.getItem('guestId');
+      if (!guestId) {
+        navigation.navigate('LandingPage');
+      }
+    };
+    checkGuestId();
+  }, []);
+
   const onDayPress = day => {
     setSelectedDate(day.dateString);
     setIsModalVisible(true);

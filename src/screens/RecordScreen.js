@@ -17,7 +17,7 @@ const {width} = Dimensions.get('window');
 const IMAGE_WIDTH = 90;
 const FIRST_IMAGE_WIDTH = 130;
 const IMAGE_MARGIN = 10;
-const BASE_URL = 'https://sof.backendbase.site';
+const BASE_URL = 'http://54.180.5.215:3000';
 
 const fetchAlbumPhotos = async selectedYear => {
   try {
@@ -424,8 +424,8 @@ const RecordScreen = () => {
           )}
         </View>
         <View style={styles.tagBar}>
-          {Object.entries(tagsUsage).map(([tagName, percentage], index) => {
-            const isLargest = tagName === highlightedTag;
+          {Object.entries(tagList || {}).map(([tagName, percentage], index) => {
+            const isLargest = tagName === mostFrequentTag;
             return (
               <View key={index} style={styles.tagItem}>
                 {getTagImage(tagName, isLargest)}
@@ -437,35 +437,36 @@ const RecordScreen = () => {
         <View style={styles.chartContainer}>
           <View style={styles.tagItem}>
             <View style={styles.barContainer}>
-              {Object.entries(tagsUsage).map(([tagName, percentage], index) => {
-                const borderRadius =
-                  index === 0
-                    ? {borderTopLeftRadius: 10, borderBottomLeftRadius: 10}
-                    : index === Object.entries(tagsUsage).length - 1
-                    ? {borderTopRightRadius: 10, borderBottomRightRadius: 10}
-                    : {};
+              {Object.entries(tagList || {}).map(
+                ([tagName, percentage], index) => {
+                  const borderRadius =
+                    index === 0
+                      ? {borderTopLeftRadius: 10, borderBottomLeftRadius: 10}
+                      : index === Object.entries(tagList || {}).length - 1
+                      ? {borderTopRightRadius: 10, borderBottomRightRadius: 10}
+                      : {};
 
-                return (
-                  <View
-                    key={index}
-                    style={[
-                      styles.tagBarItem,
-                      {
-                        width: `${percentage}`,
-                        backgroundColor: getTagColor(tagName),
-                        ...borderRadius,
-                      },
-                    ]}
-                  />
-                );
-              })}
+                  return (
+                    <View
+                      key={index}
+                      style={[
+                        styles.tagBarItem,
+                        {
+                          width: `${percentage}`,
+                          backgroundColor: getTagColor(tagName),
+                          ...borderRadius,
+                        },
+                      ]}
+                    />
+                  );
+                },
+              )}
             </View>
           </View>
         </View>
-
         <Text style={styles.summary}>
           {selectedDate}에는{' '}
-          <Text style={styles.highlight}>{highlightedTag}</Text>을 많이
+          <Text style={styles.highlight}>{mostFrequentTag}</Text>을 많이
           겪었어요!
         </Text>
       </View>

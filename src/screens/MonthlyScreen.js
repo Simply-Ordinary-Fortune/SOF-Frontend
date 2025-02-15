@@ -13,7 +13,7 @@ import axios from 'axios';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const {width} = Dimensions.get('window');
-const BASE_URL = 'https://sof.backendbase.site';
+const BASE_URL = 'http://54.180.5.215:3000';
 
 const MonthlyScreen = () => {
   const navigation = useNavigation();

@@ -13,7 +13,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import axios from 'axios';
 
 const {width} = Dimensions.get('window');
-const BASE_URL = 'https://sof.backendbase.site';
+const BASE_URL = 'http://54.180.5.215:3000';
 
 const AlbumScreen = () => {
   const navigation = useNavigation();

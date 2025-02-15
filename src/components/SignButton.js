@@ -5,6 +5,7 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 
 export default function SignButton({buttonName, redirectPath}) {

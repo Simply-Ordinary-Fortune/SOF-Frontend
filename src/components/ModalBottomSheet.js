@@ -11,14 +11,47 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 
-const ModalBottomSheet = ({visible, onClose}) => {
+const ModalBottomSheet = ({visible, onClose, recordId}) => {
+  // guest-id 가져오기
+  const guestId = localStorage.get('quest-id');
+
+  const fetchRecordDetails = async recordId => {
+    try {
+      const response = await fetch(`https://records/${recordId}`, {
+        method: 'GET',
+        headers: {
+          'guest-id': guestId,
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        return data;
+      } else {
+        throw new Error(data.message || 'Something went wrong');
+      }
+    } catch (error) {
+      console.error('Error fetching record details:', error);
+    }
+  };
+
   const [panY] = useState(new Animated.Value(0));
+
+  const [recordDetails, setRecordDetails] = useState(null);
+  useEffect(() => {
+    if (visible) {
+      fetchRecordDetails(recordId).then(data => {
+        setRecordDetails(data);
+      });
+    }
+  }, [visible, recordId]);
   // 모달 복원
   const resetPositionAnim = Animated.timing(panY, {
     toValue: 0,
     duration: 300,
     useNativeDriver: true,
   });
+
   // 모달 닫기
   const closeAnim = Animated.timing(panY, {
     toValue: 500,

@@ -37,7 +37,7 @@ const HomeScreen = ({navigation}) => {
   };
 
   const closeModal = () => {
-    setOnModalClose(true);
+    setIsModalVisible(false);
   };
 
   const showToast = message => {

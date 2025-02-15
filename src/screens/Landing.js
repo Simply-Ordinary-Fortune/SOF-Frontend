@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import SignButton from './SignButton'; // SignButton 컴포넌트를 임포트
+import SignButton from '../components/SignButton'; // SignButton 컴포넌트를 임포트
 
 const LandingPage = ({navigation}) => {
   return (

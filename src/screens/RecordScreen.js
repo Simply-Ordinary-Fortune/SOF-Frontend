@@ -17,6 +17,36 @@ const {width} = Dimensions.get('window');
 const IMAGE_WIDTH = 90;
 const FIRST_IMAGE_WIDTH = 130;
 const IMAGE_MARGIN = 10;
+const BASE_URL = 'http://54.180.5.215:3000';
+
+const fetchAlbumPhotos = async selectedYear => {
+  try {
+    const {data} = await axios.get(`${BASE_URL}/api/records/photos`, {
+      headers: {'guest-id': '65e44a6d-5f27-4a63-a819-494234d46a1d'},
+      params: {year: selectedYear},
+    });
+    return data.photos || [];
+  } catch (error) {
+    console.error('앨범 사진 가져오기 실패:', error.response || error);
+    return [];
+  }
+};
+
+const fetchTagStats = async (period = 'monthly') => {
+  try {
+    const {data} = await axios.get(`${BASE_URL}/api/statistics/user`, {
+      headers: {
+        'guest-id': '65e44a6d-5f27-4a63-a819-494234d46a1d',
+        Authorization: `Bearer accessToken`,
+      },
+      params: {period},
+    });
+    return data.tagsUsage || {};
+  } catch (error) {
+    console.error('태그 통계 가져오기 실패:', error.response || error);
+    return {};
+  }
+};
 
 const RecordScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -254,45 +284,50 @@ const RecordScreen = () => {
           )}
         </View>
         <View style={styles.tagBar}>
+          {Object.entries(tagList || {}).map(([tagName, percentage], index) => {
+            const isLargest = tagName === mostFrequentTag;
+            return (
+              <View key={index} style={styles.tagItem}>
+                {getTagImage(tagName, isLargest)}
+                <Text style={styles.tagText}>{percentage}</Text>
+              </View>
+            );
+          })}
+        </View>
+        <View style={styles.chartContainer}>
           <View style={styles.tagItem}>
-            <Image
-              source={require('../assets/green_small.png')}
-              style={styles.icon}
-            />
-            <Text style={styles.tagText}>10%</Text>
-          </View>
-          <View style={styles.tagItem}>
-            <Image
-              source={require('../assets/yellow_small.png')}
-              style={styles.icon}
-            />
-            <Text style={styles.tagText}>20%</Text>
-          </View>
-          <View style={styles.tagItem}>
-            <Image
-              source={require('../assets/orange.png')}
-              style={styles.icon}
-            />
-            <Text style={styles.tagText}>40%</Text>
-          </View>
-          <View style={styles.tagItem}>
-            <Image
-              source={require('../assets/blue_small.png')}
-              style={styles.icon}
-            />
-            <Text style={styles.tagText}>10%</Text>
-          </View>
-          <View style={styles.tagItem}>
-            <Image
-              source={require('../assets/pink_small.png')}
-              style={styles.icon}
-            />
-            <Text style={styles.tagText}>20%</Text>
+            <View style={styles.barContainer}>
+              {Object.entries(tagList || {}).map(
+                ([tagName, percentage], index) => {
+                  const borderRadius =
+                    index === 0
+                      ? {borderTopLeftRadius: 10, borderBottomLeftRadius: 10}
+                      : index === Object.entries(tagList || {}).length - 1
+                      ? {borderTopRightRadius: 10, borderBottomRightRadius: 10}
+                      : {};
+
+                  return (
+                    <View
+                      key={index}
+                      style={[
+                        styles.tagBarItem,
+                        {
+                          width: `${percentage}`,
+                          backgroundColor: getTagColor(tagName),
+                          ...borderRadius,
+                        },
+                      ]}
+                    />
+                  );
+                },
+              )}
+            </View>
           </View>
         </View>
         <Text style={styles.summary}>
-          2025년 1월에는 <Text style={styles.highlight}>뜻밖의 친절</Text>을
-          많이 겪었어요!
+          {selectedDate}에는{' '}
+          <Text style={styles.highlight}>{mostFrequentTag}</Text>을 많이
+          겪었어요!
         </Text>
       </View>
     </View>

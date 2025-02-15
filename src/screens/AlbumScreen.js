@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import data from '../constants/luckyLetter.json';
 
 const {width} = Dimensions.get('window');
+const BASE_URL = 'http://54.180.5.215:3000';
 
 const AlbumScreen = () => {
   const navigation = useNavigation();

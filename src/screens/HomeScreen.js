@@ -10,6 +10,7 @@ import {
   Card,
   Modal,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {Calendar} from 'react-native-calendars';
 import {Icon} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
@@ -20,6 +21,8 @@ const HomeScreen = () => {
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [onModalClose, setOnModalClose] = useState(false);
+  const navigation = useNavigation();
+
   const navigation = useNavigation();
 
   const onDayPress = day => {
@@ -55,8 +58,7 @@ const HomeScreen = () => {
           />
         </TouchableOpacity>
         <Text style={styles.title}>🍀아보행 로고🍀</Text>
-        <TouchableOpacity
-          onPress={() => showToast('설정 페이지가 준비중입니다.')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SettingScreen')}>
           <Icon
             name="settings-outline"
             type="ionicon"

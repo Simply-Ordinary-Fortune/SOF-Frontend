@@ -7,18 +7,52 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import data from '../constants/luckyLetter.json';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import axios from 'axios';
 
 const {width} = Dimensions.get('window');
-const BASE_URL = 'http://54.180.5.215:3000';
+const BASE_URL = 'https://soff.backendbase.site';
 
 const AlbumScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const guestId = '65e44a6d-5f27-4a63-a819-494234d46a1d'; //25be2eed-a20c-4337-9434-02dc268d659c
+  const [selectedYear, setSelectedYear] = useState(route.params?.year || 2025);
+
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/records/photos`, {
+          headers: {'guest-id': guestId},
+          params: {year: selectedYear},
+        });
+        const filteredPhotos = response.data.photos.filter(item => {
+          const year = item.createdAt.split('T')[0].split('-')[0];
+          return year === String(selectedYear);
+        });
+        const sortedPhotos = filteredPhotos.sort((a, b) => {
+          const monthA = parseInt(a.createdAt.split('T')[0].split('-')[1]);
+          const monthB = parseInt(b.createdAt.split('T')[0].split('-')[1]);
+          return monthA - monthB;
+        });
+
+        setPhotos(sortedPhotos || []);
+        setLoading(false);
+      } catch (error) {
+        console.error('❌ 사진 데이터 가져오기 실패:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchPhotos();
+  }, [selectedYear]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>아보행 앨범</Text>
         <TouchableOpacity onPress={() => navigation.navigate('RecordScreen')}>
@@ -33,12 +67,22 @@ const AlbumScreen = () => {
         contentContainerStyle={styles.scrollContainer}
         scrollEventThrottle={16}
         disableIntervalMomentum={true}>
-        {data.length > 0 ? (
-          data.map((item, index) => {
-            const [year, month, day] = item.letterDate.split('-');
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>로딩 중...</Text>
+          </View>
+        ) : Array.isArray(photos) && photos.length > 0 ? (
+          photos.map((item, index) => {
+            const [year, month] = item.createdAt.split('T')[0].split('-');
+            const fullImageUrl = `${BASE_URL}${item.imageUrl}`;
+
             return (
               <View key={index} style={styles.imageContainer}>
-                <Image style={styles.image} source={{uri: item.ImageUrl}} />
+                {fullImageUrl ? (
+                  <Image style={styles.image} source={{uri: fullImageUrl}} />
+                ) : (
+                  <Text style={styles.noImageText}>이미지 없음</Text>
+                )}
                 <Text style={styles.monthLabel}>{parseInt(month)}월</Text>
               </View>
             );
@@ -49,7 +93,7 @@ const AlbumScreen = () => {
           </View>
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

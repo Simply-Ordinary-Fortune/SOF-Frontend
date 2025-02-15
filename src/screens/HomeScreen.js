@@ -10,17 +10,15 @@ import {
   Card,
   Modal,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {Calendar} from 'react-native-calendars';
 import {Icon} from 'react-native-elements';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [onModalClose, setOnModalClose] = useState(false);
-
   const navigation = useNavigation();
 
   const onDayPress = day => {
@@ -29,7 +27,7 @@ const HomeScreen = () => {
   };
 
   const closeModal = () => {
-    setOnModalClose(true);
+    setIsModalVisible(false);
   };
 
   const showToast = message => {
@@ -46,8 +44,7 @@ const HomeScreen = () => {
       />
       <ModalBottomSheet visible={isModalVisible} onClose={closeModal} />
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => showToast('차트 페이지가 준비중입니다.')}>
+        <TouchableOpacity onPress={() => navigation.navigate('RecordScreen')}>
           <Icon
             name="bar-chart-outline"
             type="ionicon"
@@ -56,7 +53,8 @@ const HomeScreen = () => {
           />
         </TouchableOpacity>
         <Text style={styles.title}>🍀아보행 로고🍀</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SettingScreen')}>
+        <TouchableOpacity
+          onPress={() => showToast('설정 페이지가 준비중입니다.')}>
           <Icon
             name="settings-outline"
             type="ionicon"

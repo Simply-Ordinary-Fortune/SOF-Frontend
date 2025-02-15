@@ -17,12 +17,13 @@ const {width} = Dimensions.get('window');
 const IMAGE_WIDTH = 90;
 const FIRST_IMAGE_WIDTH = 130;
 const IMAGE_MARGIN = 10;
-const BASE_URL = 'http://54.180.5.215:3000';
+const BASE_URL = 'https://soff.backendbase.site';
 
 const fetchAlbumPhotos = async selectedYear => {
   try {
     const {data} = await axios.get(`${BASE_URL}/api/records/photos`, {
       headers: {'guest-id': '65e44a6d-5f27-4a63-a819-494234d46a1d'},
+      //25be2eed-a20c-4337-9434-02dc268d659c
       params: {year: selectedYear},
     });
     return data.photos || [];

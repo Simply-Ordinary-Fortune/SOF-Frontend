@@ -10,11 +10,20 @@ import {
   Image,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
-
-const ModalBottomSheet = ({visible, onClose, recordId}) => {
+import recordData from '../constants/ViewDetailRecord.json';
+const ModalBottomSheet = ({visible, onClose, selectedDate}) => {
   // guest-id 가져오기
   const guestId = localStorage.get('quest-id');
 
+  // 선택한 날짜 데이터 로딩(목데이터 ver.)
+  useEffect(() => {
+    if (visible && selectedDate) {
+      const formatDate = selectedDate.toISOString().slice(0, 10);
+      setRecordDetails(recordData[formatDate]);
+    }
+  }, [visible, selectedDate]);
+  // api 호출용
+  /*
   const fetchRecordDetails = async recordId => {
     try {
       const response = await fetch(`https://records/${recordId}`, {
@@ -34,12 +43,13 @@ const ModalBottomSheet = ({visible, onClose, recordId}) => {
       console.error('Error fetching record details:', error);
     }
   };
+  */
 
   const [panY] = useState(new Animated.Value(0));
 
   const [recordDetails, setRecordDetails] = useState(null);
   useEffect(() => {
-    if (visible) {
+    if (visible && selectedDate) {
       fetchRecordDetails(recordId).then(data => {
         setRecordDetails(data);
       });
@@ -102,7 +112,10 @@ const ModalBottomSheet = ({visible, onClose, recordId}) => {
               color="#000"
               onPress={onClose}
             />
-            <Text style={styles.date}>01월 07일 화요일의 행운</Text>
+            <Text style={styles.date}>
+              {' '}
+              `${selectedDate.getDate()}월 ${selectedDate.getDay()}일의 행운
+            </Text>
             <Icon
               name="close-outline"
               type="ionicon"
@@ -112,18 +125,24 @@ const ModalBottomSheet = ({visible, onClose, recordId}) => {
             />
           </View>
           <View style={styles.content}>
-            <View style={styles.card}>
-              <Image
-                source={require('../assets/dog.jpg')}
-                style={styles.image}
-              />
-              <View style={styles.textContainer}>
-                <Text style={styles.recordText}>한줄 기록 내용</Text>
-                <View style={styles.tagContainer}>
-                  <Text style={styles.tag}>자연의 선물</Text>
+            {recordDetails ? (
+              <View style={styles.card}>
+                <Image
+                  source={require('../assets/dog.jpg')}
+                  style={styles.image}
+                />
+                <View style={styles.textContainer}>
+                  <Text style={styles.recordText}>한줄 기록 내용</Text>
+                  <View style={styles.tagContainer}>
+                    <Text style={styles.tag}>자연의 선물</Text>
+                  </View>
                 </View>
               </View>
-            </View>
+            ) : (
+              <View style={styles.card}>
+                <Text>내용을 불러올 수 없습니다.</Text>
+              </View>
+            )}
           </View>
         </Animated.View>
       </View>

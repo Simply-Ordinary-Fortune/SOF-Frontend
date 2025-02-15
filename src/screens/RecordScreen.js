@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import data from '../constants/luckyLetter.json';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const {width} = Dimensions.get('window');
 
@@ -140,7 +141,7 @@ const RecordScreen = () => {
       : yearlyData;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>기록 아카이브</Text>
         <TouchableOpacity
@@ -284,17 +285,19 @@ const RecordScreen = () => {
             </View>
           )}
         </View>
-        <View style={styles.tagBar}>
-          {Object.entries(tagList || {}).map(([tagName, percentage], index) => {
-            const isLargest = tagName === mostFrequentTag;
-            return (
-              <View key={index} style={styles.tagItem}>
-                {getTagImage(tagName, isLargest)}
-                <Text style={styles.tagText}>{percentage}</Text>
-              </View>
-            );
-          })}
-        </View>
+      </View>
+      <View style={styles.tagBar}>
+        {Object.entries(tagList || {}).map(([tagName, percentage], index) => {
+          const isLargest = tagName === mostFrequentTag; // 여기서 highlightedTag 대신 mostFrequentTag 사용
+          return (
+            <View key={index} style={styles.tagItem}>
+              {getTagImage(tagName, isLargest)}
+              <Text style={styles.tagText}>{percentage}</Text>
+            </View>
+          );
+        })}
+      </View>
+      <View style={styles.chartContainer}>
         <View style={styles.chartContainer}>
           <View style={styles.tagItem}>
             <View style={styles.barContainer}>
@@ -331,7 +334,7 @@ const RecordScreen = () => {
           겪었어요!
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

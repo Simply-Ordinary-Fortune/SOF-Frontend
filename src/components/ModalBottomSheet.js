@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,10 +10,18 @@ import {
   Image,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import recordData from '../constants/ViewDetailRecord.json';
 const ModalBottomSheet = ({visible, onClose, selectedDate}) => {
-  // guest-id 가져오기
-  const guestId = localStorage.get('quest-id');
+  // guest-id 가져오기(api 호출용)
+  /*
+  useEffect(() => {
+    const fetchGuestId = async () => {
+      const guestId = await AsyncStorage.getItem('guest-id');
+    };
+    fetchGuestId();
+  }, []);
+  */
 
   // 선택한 날짜 데이터 로딩(목데이터 ver.)
   useEffect(() => {
@@ -48,6 +56,7 @@ const ModalBottomSheet = ({visible, onClose, selectedDate}) => {
   const [panY] = useState(new Animated.Value(0));
 
   const [recordDetails, setRecordDetails] = useState(null);
+  /*
   useEffect(() => {
     if (visible && selectedDate) {
       fetchRecordDetails(recordId).then(data => {
@@ -55,6 +64,7 @@ const ModalBottomSheet = ({visible, onClose, selectedDate}) => {
       });
     }
   }, [visible, recordId]);
+  */
   // 모달 복원
   const resetPositionAnim = Animated.timing(panY, {
     toValue: 0,
@@ -113,8 +123,9 @@ const ModalBottomSheet = ({visible, onClose, selectedDate}) => {
               onPress={onClose}
             />
             <Text style={styles.date}>
-              {' '}
-              `${selectedDate.getDate()}월 ${selectedDate.getDay()}일의 행운
+              {selectedDate
+                ? `${selectedDate.getDate()}월 ${selectedDate.getDay()}일의 행운`
+                : '날짜가 로드되지 않았습니다.'}
             </Text>
             <Icon
               name="close-outline"
@@ -132,15 +143,21 @@ const ModalBottomSheet = ({visible, onClose, selectedDate}) => {
                   style={styles.image}
                 />
                 <View style={styles.textContainer}>
-                  <Text style={styles.recordText}>한줄 기록 내용</Text>
+                  <Text style={styles.recordText}>{recordDetails.text}</Text>
                   <View style={styles.tagContainer}>
-                    <Text style={styles.tag}>자연의 선물</Text>
+                    {recordDetails.tags.map(tag => (
+                      <Text key={tag} style={styles.tag}>
+                        {tag}
+                      </Text>
+                    ))}
                   </View>
                 </View>
               </View>
             ) : (
               <View style={styles.card}>
-                <Text>내용을 불러올 수 없습니다.</Text>
+                <Text>
+                  내용을 불러올 수 없습니다. 잠시 후 다시 시도해주세요.
+                </Text>
               </View>
             )}
           </View>

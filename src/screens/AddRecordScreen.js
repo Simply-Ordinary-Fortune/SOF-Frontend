@@ -17,6 +17,7 @@ import Tag from '../components/Tag';
 import SealedRecord from '../components/SealRecord';
 import AddRecordBtn from '../components/AddRecordBtn';
 import * as ImageResizer from 'react-native-image-resizer';
+import {BASE_URL} from '../../env.js';
 
 const {height} = Dimensions.get('window'); // 화면 높이 가져오기
 

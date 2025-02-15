@@ -9,10 +9,13 @@ import {useNavigation} from '@react-navigation/native';
 import {useState} from 'react';
 import axios from 'axios';
 import * as ImageResizer from 'react-native-image-resizer';
+import {BASE_URL} from '../../env.js';
+import {GUEST_ID} from '../../env.js';
 
 const AddRecordBtn = ({recordText, selectedTag, photo, isToday}) => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+  const guestId = GUEST_ID;
   // const uri = typeof photo === 'string' ? photo : photo?.uri;
 
   // const resizeImage = async photo => {
@@ -57,7 +60,6 @@ const AddRecordBtn = ({recordText, selectedTag, photo, isToday}) => {
     //   return;
     // }
 
-    const guestId = 'your-guest-id';
     if (!guestId) {
       Alert.alert('오류', 'guest-id가 필요합니다.');
       setIsLoading(false);
@@ -82,27 +84,21 @@ const AddRecordBtn = ({recordText, selectedTag, photo, isToday}) => {
 
     console.log('FormData:', formData);
     try {
-      axios
-        .post('http://54.180.5.215:3000/api/signup')
-        .then(response => console.log('서버 정상:', response.data))
-        .catch(error => console.error('서버 연결 실패:', error));
+      // axios
+      //   .post(`{B}api/signup`)
+      //   .then(response => console.log('서버 정상:', response.data))
+      //   .catch(error => console.error('서버 연결 실패:', error));
 
-      // const response = await axios.post(
-      //   'http://54.180.5.215:3000/api/records',
-      //   formData,
-      //   {
-      //     headers: {
-      //       'guest-id': '65e44a6d-5f27-4a63-a819-494234d46a1d',
-      //     },
-      //   },
-      // );
+      const response = await axios.post(`${BASE_URL}/api/records`, formData, {
+        headers: {
+          'guest-id': guestId,
+        },
+      });
 
-      // console.log('응답:', response.data);
+      console.log('응답:', response.data);
       Alert.alert('성공', '기록이 저장되었습니다!');
-      navigation.goBack();
+      navigation.navigate('RecordScreen');
     } catch (error) {
-      console.error('에러 발생:', error);
-      Alert.alert('오류', '기록 저장에 실패했습니다.');
     } finally {
       setIsLoading(false);
     }

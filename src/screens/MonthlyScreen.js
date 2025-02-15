@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,27 +9,58 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import data from '../constants/luckyLetter.json';
+import axios from 'axios';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const {width} = Dimensions.get('window');
-const BASE_URL = 'http://54.180.5.215:3000';
+const BASE_URL = 'https://soff.backendbase.site';
 
 const MonthlyScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
   const {selectedMonth} = route.params || {};
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredData = data
-    .filter(item => item.letterDate.startsWith(selectedMonth))
-    .sort((a, b) => new Date(a.letterDate) - new Date(b.letterDate));
+  useEffect(() => {
+    if (selectedMonth) {
+      setLoading(true);
+
+      const year = selectedMonth.split('-')[0]; // 연도
+      const month = selectedMonth.split('-')[1]; // 월
+
+      axios
+        .get(`${BASE_URL}/api/records/photos?year=${year}&month=${month}`, {
+          headers: {'guest-id': '65e44a6d-5f27-4a63-a819-494234d46a1d'},
+        })
+        .then(response => {
+          const filteredPhotos = response.data.photos || [];
+          const filteredByMonth = filteredPhotos.filter(photo => {
+            const photoMonth = new Date(photo.createdAt).getMonth() + 1;
+            return photoMonth === parseInt(month, 10);
+          });
+
+          setPhotos(filteredByMonth);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('사진 가져오기 실패:', error);
+          setLoading(false);
+        });
+    }
+  }, [selectedMonth]);
+
+  if (loading) {
+    return <Text>로딩 중...</Text>;
+  }
 
   const groupImagesByRows = () => {
     const rows = [];
     let row = [];
     const pattern = [1, 3, 2];
 
-    filteredData.forEach((item, index) => {
+    photos.forEach((item, index) => {
       row.push(item);
 
       if (row.length === pattern[rows.length % pattern.length]) {
@@ -52,7 +83,7 @@ const MonthlyScreen = () => {
         {row.map((item, index) => (
           <Image
             key={index}
-            source={{uri: item.ImageUrl}}
+            source={{uri: `${BASE_URL}${item.imageUrl}`}}
             style={[styles.image, {width: getImageWidth(row.length)}]}
             resizeMode="cover"
           />
@@ -68,7 +99,7 @@ const MonthlyScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('AlbumScreen')}>
           <Image
@@ -86,11 +117,11 @@ const MonthlyScreen = () => {
               parseInt(selectedMonth?.split('-')[1]) || ''
             }월`}
           </Text>
-          <Text style={styles.statText}>아보행 {filteredData.length}개</Text>
+          <Text style={styles.statText}>아보행 {photos.length}개</Text>
           {renderImages()}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

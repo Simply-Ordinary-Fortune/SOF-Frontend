@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
+  ScrollView,
   Card,
   Modal,
 } from 'react-native';
@@ -47,94 +48,96 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Toast
-        message={toastMessage}
-        visible={isToastVisible}
-        onHide={() => setIsToastVisible(false)}
-      />
-      <ModalBottomSheet visible={isModalVisible} onClose={closeModal} />
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => showToast('차트 페이지가 준비중입니다.')}>
-          <Icon
-            name="bar-chart-outline"
-            type="ionicon"
-            size={28}
-            color="#959595"
-          />
-        </TouchableOpacity>
-        <Text style={styles.title}>🍀아보행 로고🍀</Text>
-        <TouchableOpacity
-          onPress={() => showToast('설정 페이지가 준비중입니다.')}>
-          <Icon
-            name="settings-outline"
-            type="ionicon"
-            size={28}
-            color="#959595"
-          />
-        </TouchableOpacity>
-      </View>
-      <Calendar
-        onDayPress={onDayPress}
-        markedDates={{
-          [selectedDate]: {selected: true, selectedColor: '#2ECC71'},
-          '2023-01-06': {marked: true, dotColor: '#50cebb'},
-          '2023-01-10': {marked: true, dotColor: '#f0ad4e'},
-          '2023-01-15': {marked: true, dotColor: '#d9534f'},
-        }}
-        theme={{
-          backgroundColor: '#ffffff',
-          calendarBackground: '#ffffff',
-          textSectionTitleColor: '#b6c1cd',
-          selectedDayBackgroundColor: '#2ecc71',
-          selectedDayTextColor: '#ffffff',
-          todayTextColor: '#000',
-          dayTextColor: '#2d4150',
-          textDisabledColor: '#d9e1e8',
-          dotColor: '#2ecc71',
-          selectedDotColor: '#ffffff',
-          arrowColor: '#2ecc71',
-          monthTextColor: '#000',
-          textMonthFontWeight: 'bold',
-          textDayFontSize: 16,
-          textMonthFontSize: 22,
-          textDayHeaderFontSize: 14,
-        }}
-        style={styles.calendar}
-        markingType={'custom'}
-        monthFormat={'yyyy년 MM월'}
-        firstDay={0}
-        dayNames={[
-          '일요일',
-          '월요일',
-          '화요일',
-          '수요일',
-          '목요일',
-          '금요일',
-          '토요일',
-        ]}
-        dayNamesShort={['일', '월', '화', '수', '목', '금', '토']}
-      />
-      {/* 회색 구분선 */}
-      <View style={styles.divider} />
-      <Text style={styles.promptText}>오늘의 행운</Text>
-      <View style={styles.recordSection}>
-        <Text style={styles.descriptionText}>
-          오늘 발견한 아주 보통의 행운이 있나요?
-        </Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('RecordScreen')}>
-          <Text
-            style={styles.buttonText}
-            // onPress={() =>
-            //   showToast('오늘의 행운 기록하기 페이지가 준비중입니다.')
-            // }
-          >
-            오늘의 행운 기록하기
+      <ScrollView>
+        <Toast
+          message={toastMessage}
+          visible={isToastVisible}
+          onHide={() => setIsToastVisible(false)}
+        />
+        <ModalBottomSheet visible={isModalVisible} onClose={closeModal} />
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => showToast('차트 페이지가 준비중입니다.')}>
+            <Icon
+              name="bar-chart-outline"
+              type="ionicon"
+              size={28}
+              color="#959595"
+            />
+          </TouchableOpacity>
+          <Text style={styles.title}>🍀아보행🍀</Text>
+          <TouchableOpacity
+            onPress={() => showToast('설정 페이지가 준비중입니다.')}>
+            <Icon
+              name="settings-outline"
+              type="ionicon"
+              size={28}
+              color="#959595"
+            />
+          </TouchableOpacity>
+        </View>
+        <Calendar
+          onDayPress={onDayPress}
+          markedDates={{
+            [selectedDate]: {selected: true, selectedColor: '#2ECC71'},
+            '2023-01-06': {marked: true, dotColor: '#50cebb'},
+            '2023-01-10': {marked: true, dotColor: '#f0ad4e'},
+            '2023-01-15': {marked: true, dotColor: '#d9534f'},
+          }}
+          theme={{
+            backgroundColor: '#ffffff',
+            calendarBackground: '#ffffff',
+            textSectionTitleColor: '#b6c1cd',
+            selectedDayBackgroundColor: '#2ecc71',
+            selectedDayTextColor: '#ffffff',
+            todayTextColor: '#000',
+            dayTextColor: '#2d4150',
+            textDisabledColor: '#d9e1e8',
+            dotColor: '#2ecc71',
+            selectedDotColor: '#ffffff',
+            arrowColor: '#2ecc71',
+            monthTextColor: '#000',
+            textMonthFontWeight: 'bold',
+            textDayFontSize: 16,
+            textMonthFontSize: 22,
+            textDayHeaderFontSize: 14,
+          }}
+          style={styles.calendar}
+          markingType={'custom'}
+          monthFormat={'yyyy년 MM월'}
+          firstDay={0}
+          dayNames={[
+            '일요일',
+            '월요일',
+            '화요일',
+            '수요일',
+            '목요일',
+            '금요일',
+            '토요일',
+          ]}
+          dayNamesShort={['일', '월', '화', '수', '목', '금', '토']}
+        />
+        {/* 회색 구분선 */}
+        <View style={styles.divider} />
+        <Text style={styles.promptText}>오늘의 행운</Text>
+        <View style={styles.recordSection}>
+          <Text style={styles.descriptionText}>
+            오늘 발견한 아주 보통의 행운이 있나요?
           </Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('RecordScreen')}>
+            <Text
+              style={styles.buttonText}
+              // onPress={() =>
+              //   showToast('오늘의 행운 기록하기 페이지가 준비중입니다.')
+              // }
+            >
+              오늘의 행운 기록하기
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -144,6 +147,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 40,
+    paddingLeft: 10,
+    paddingRight: 10,
     paddingHorizontal: 20,
   },
   header: {
@@ -160,13 +165,13 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
   },
   calendar: {
-    marginTop: 30,
+    marginTop: 10,
     paddingBottom: 12,
     marginBottom: 20,
     borderRadius: 10,
@@ -179,6 +184,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#2ECC71',
     padding: 20,
+    marginBottom: 20,
     borderRadius: 10,
     alignItems: 'center',
   },

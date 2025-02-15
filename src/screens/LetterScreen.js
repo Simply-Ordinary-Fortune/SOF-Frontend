@@ -1,9 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import {StyleSheet, View, Text, Image, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, ScrollView} from 'react-native';
 import CloverImage from '../components/CloverIcon.js';
+
+const windowWidth = Dimensions.get('window').width;
 
 const LetterScreen = () => {
   console.log('행운편지보관함 첫 화면 랜더링입니다...');
@@ -53,61 +55,65 @@ const LetterScreen = () => {
   ];
 
   return (
-    <View>
-      <Text style={styles.title}>행운의 유리병 편지</Text>
-      <View style={styles.imageContainer}>
-        {/* 유리병 이미지 */}
-        <Image
-          source={require('../assets/bottle.png')} // 유리병 이미지 경로
-          style={styles.bottleImage}
-          resizeMode="contain"
-        />
-        {/* 날짜 */}
-        <Text style={styles.date}>{formattedDate}</Text>
-        {/* 새로운 편지가 있을 때만 클로버 표시 */}
-        {hasNewMessage ? (
-          <Image
-            source={require('../assets/clover.png')}
-            style={styles.cloverImage}
-            resizeMode="contain"
-          />
-        ) : null}
-      </View>
-      {/* 새로운 편지가 있을 때만 알람 표시 */}
-      {hasNewMessage ? (
-        <View style={styles.alarmContainer}>
-          <Text style={styles.alarmText}>
-            1개의 새로운 행운편지가 도착했어요!
-          </Text>
-        </View>
-      ) : null}
-      <View style={styles.menuContainer}>
-        <Text style={styles.menuText}>행운편지 보관함</Text>
-        {/* 화살표 아이콘 추가 */}
-        <Icon
-          name="angle-right"
-          size={40}
-          color="#959595"
-          style={styles.arrowIcon}
-          onPress={() => navigation.navigate('LetterDetailScreen')} // 아이콘 클릭 시 이동
-        />
-      </View>
-      {/* 가장 최근의 행운 편지 2개 표시 */}
-      <View style={styles.luckyLettersContainer}>
-        {luckyLetters.slice(0, 2).map(letter => (
-          <View key={letter.letterId} style={styles.letterItem}>
-            <SafeAreaView>
-              <CloverImage
-                style={styles.cloverShapeImage}
-                imageUrl={letter.ImageUrl}
-                size={90}
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.viewer}>
+        <View style={{flex: 1, paddingBottom: 20}}>
+          <Text style={styles.title}>행운의 유리병 편지</Text>
+          <View style={styles.imageContainer}>
+            {/* 유리병 이미지 */}
+            <Image
+              source={require('../assets/bottle.png')} // 유리병 이미지 경로
+              style={styles.bottleImage}
+              resizeMode="contain"
+            />
+            {/* 날짜 */}
+            <Text style={styles.date}>{formattedDate}</Text>
+            {/* 새로운 편지가 있을 때만 클로버 표시 */}
+            {hasNewMessage ? (
+              <Image
+                source={require('../assets/clover.png')}
+                style={styles.cloverImage}
+                resizeMode="contain"
               />
-            </SafeAreaView>
-            <Text style={styles.letterDate}>{letter.letterDate}</Text>
+            ) : null}
           </View>
-        ))}
-      </View>
-    </View>
+          {/* 새로운 편지가 있을 때만 알람 표시 */}
+          {hasNewMessage ? (
+            <View style={styles.alarmContainer}>
+              <Text style={styles.alarmText}>
+                1개의 새로운 행운편지가 도착했어요!
+              </Text>
+            </View>
+          ) : null}
+          <View style={styles.menuContainer}>
+            <Text style={styles.menuText}>행운편지 보관함</Text>
+            {/* 화살표 아이콘 추가 */}
+            <Icon
+              name="angle-right"
+              size={40}
+              color="#959595"
+              style={styles.arrowIcon}
+              onPress={() => navigation.navigate('LetterDetailScreen')} // 아이콘 클릭 시 이동
+            />
+          </View>
+          {/* 가장 최근의 행운 편지 2개 표시 */}
+          <View style={styles.luckyLettersContainer}>
+            {luckyLetters.slice(0, 2).map(letter => (
+              <View key={letter.letterId} style={styles.letterItem}>
+                <SafeAreaView>
+                  <CloverImage
+                    style={styles.cloverShapeImage}
+                    imageUrl={letter.ImageUrl}
+                    size={90}
+                  />
+                </SafeAreaView>
+                <Text style={styles.letterDate}>{letter.letterDate}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -115,8 +121,15 @@ const LetterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+    padding: 8,
+    paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  viewer: {
+    flexGrow: 1,
+    margin: 10,
   },
   title: {
     fontSize: 24,
@@ -124,8 +137,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   bottleImage: {
-    width: 400,
-    height: 400,
+    width: 300,
+    height: 300,
+    margin: 20,
+    // width: windowWidth * 0.8, // 화면 너비의 80%
+    // height: windowHeight * 0.4, // 화면 높이의 40%
   },
   date: {
     position: 'absolute',
